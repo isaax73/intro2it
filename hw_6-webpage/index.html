@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Life</title>
+    <meta name="description" content="An engaging introduction to my life, education, career, and how to contact me.">
+    <meta name="keywords" content="My Life, Biography, Education, Career, Contact">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-md fixed-top">
+        <div class="container px-4 mx-auto">
+            <a class="navbar-brand font-bold text-xl" href="#">My Life</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" @click="scrollToSection('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" @click="scrollToSection('about')">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" @click="scrollToSection('education')">My Education</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" @click="scrollToSection('career')">My Career</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link cursor-pointer" @click="scrollToSection('contact')">Contact Me</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app" class="container px-4 mx-auto mt-24">
+        <section id="home" class="py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">Welcome to My Life</h1>
+                <p class="text-lg mb-8">This website provides an overview of my life, education, career, and how to contact me.</p>
+                <img src="/img/gallery-image-1 (2).jpeg" alt="Introduction Image" class="rounded-lg shadow-md mx-auto mb-8">
+                <p class="text-lg">Navigate through the sections to learn more about me and get in touch if you'd like to connect.</p>
+            </div>
+        </section>
+
+        <section id="about" class="py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">About Me</h1>
+                <p class="text-lg mb-8">A detailed personal biography that tells the story of who I am.</p>
+                <div class="flex justify-center items-center">
+                    <img src="img/profile_PP (3).jpeg" alt="Profile Picture" class="rounded-full shadow-md mr-8">
+                    <div>
+                        <p class="text-lg mb-4">
+                            My name is Islam, and I am a passionate individual with a strong background in technology and a keen interest in innovation. 
+                            Born in Nukus, Karakalpakistan, on December 5th, 2006, I moved to Tashkent in 2012 and have lived here since. Growing up in a tech-savvy environment, 
+                            I developed a love for coding at a young age, which has guided my journey so far.
+                        </p>
+                        <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Read More</button>
+                    </div>
+                </div>
+            </div>
+            <transition name="fade">
+                <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+                    <div class="bg-white p-8 rounded-lg shadow-md relative">
+                        <h2 class="text-2xl font-bold mb-4">More About Me</h2>
+                        <p class="text-lg mb-4">
+                            I graduated from the 17th School in Tashkent and then enrolled at Inha University in the School of Computer and Information Engineering. 
+                            Alongside my university studies, I attended IT-LABS tech school to enhance my programming skills, where I studied both frontend and backend development. 
+                            Later, I taught myself Python, further fueling my enthusiasm for coding. My interest lies not only in coding but also in reading books related to IT and technology.
+                            I live in a family of five, being the oldest child, which has taught me responsibility and leadership. My hobbies include playing football and reading comics, which help me unwind. 
+                            I would describe myself as a calm person, though I do occasionally get angry or nervous, like anyone else. My journey has been marked by continuous learning and a desire to explore 
+                            new horizons in the tech industry, and I look forward to what's next. 
+                        </p>
+                        <button @click="showModal = false" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded absolute top-2 right-2">Close</button>
+                    </div>
+                </div>
+            </transition>
+        </section>
+
+        <section id="education" class="py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">My Education</h1>
+                <p class="text-lg mb-8">Showcasing my educational journey in a visually appealing timeline.</p>
+                <div class="timeline">
+                    <div class="timeline-item" v-for="(milestone, index) in educationMilestones" :key="index" @mouseover="animateTimelineItem(index)">
+                        <transition name="slide-fade">
+                            <div class="timeline-content p-6 bg-white rounded-lg shadow-md mb-8">
+                                <h3 class="text-xl font-bold mb-2">{{ milestone.title }}</h3>
+                                <p class="text-gray-600 mb-4">{{ milestone.institution }} ({{ milestone.year }})</p>
+                                <p>{{ milestone.description }}</p>
+                                <button @click="toggleCollapse(index)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Details</button>
+                                <transition name="fade">
+                                    <div v-if="milestone.collapsed" class="mt-4">
+                                        <p>{{ milestone.details }}</p>
+                                    </div>
+                                </transition>
+                            </div>
+                        </transition>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="career" class="py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">My Career</h1>
+                <p class="text-lg mb-8">Highlighting professional experience, including past job titles, companies, and key achievements.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div v-for="(job, index) in careerJobs" :key="index" class="p-6 bg-white rounded-lg shadow-md transition transform hover:-translate-y-1 hover:shadow-xl">
+                        <h3 class="text-xl font-bold mb-2">{{ job.title }} at {{ job.company }}</h3>
+                        <p class="text-gray-600 mb-4">{{ job.timeFrame }}</p>
+                        <p>{{ job.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-16">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">Contact Me</h1>
+                <p class="text-lg mb-8">Get in touch with me through the form below.</p>
+                <form @submit.prevent="submitForm" class="max-w-md mx-auto">
+                    <div class="mb-4">
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="name" v-model="formData.name" class="mt-1 p-2 w-full border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" id="email" v-model="formData.email" class="mt-1 p-2 w-full border rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                        <textarea id="message" v-model="formData.message" class="mt-1 p-2 w-full border rounded" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
+                </form>
+                <transition name="fade">
+                    <p v-if="formSubmitted" class="mt-4 text-green-500">Thank you for your message!</p>
+                </transition>
+                <transition name="fade">
+                    <p v-if="formError" class="mt-4 text-red-500">{{ formError }}</p>
+                </transition>
+                <div v-if="alertMessage" class="fixed bottom-4 right-4 bg-yellow-500 text-white p-4 rounded shadow-md">
+                    {{ alertMessage }}
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="bg-white shadow-md text-center py-4 mt-8">
+        <p>&copy; 2024 My Life. All rights reserved.</p>
+        <div class="mt-2">
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-2"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-2"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-2"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        const { createApp } = Vue;
+        createApp({
+            data() {
+                return {
+                    showModal: false,
+                    formData: {
+                        name: '',
+                        email: '',
+                        message: ''
+                    },
+                    formSubmitted: false,
+                    formError: '',
+                    alertMessage: '',
+                    educationMilestones: [
+                        {
+                            title: 'General Education',
+                            institution: ' 17th School ',
+                            year: '2013-2024',
+                            description: 'Completed my general education in maths and physics ',
+                            details: 'Focused on maths, physics, english and IT.',
+                            collapsed: false
+                        },
+                        {
+                            title: 'Bachelor in Software Engineering',
+                            institution: 'University of Inha',
+                            year: '2024-2028',
+                            description: 'Advanced my skills in software engineering and project management.',
+                            details: 'Specialized in agile methodologies and full-stack development.',
+                            collapsed: false
+                        }
+                    ],
+                    careerJobs: [
+                        {
+                            title: 'Software Engineer',
+                            company: 'TechCorp',
+                            timeFrame: '2021-2023',
+                            description: 'Developing cutting-edge applications and leading projects.'
+                        },
+                        {
+                            title: 'Intern',
+                            company: 'Innovatech Solutions',
+                            timeFrame: '2020-2021',
+                            description: 'Gained hands-on experience and contributed to various projects.'
+                        }
+                    ]
+                }
+            },
+            methods: {
+                scrollToSection(sectionId) {
+                    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+                },
+                submitForm() {
+                    if (this.validateForm()) {
+                        this.formSubmitted = true;
+                        this.formError = '';
+                        this.alertMessage = '';
+                        // Simulate form submission
+                        setTimeout(() => {
+                            this.formData = { name: '', email: '', message: '' };
+                            this.formSubmitted = false;
+                        }, 2000);
+                    }
+                },
+                validateForm() {
+                    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!this.formData.name || !this.formData.email || !this.formData.message) {
+                        this.formError = 'Please fill in all fields.';
+                        this.alertMessage = 'Please fill in all fields.';
+                        setTimeout(() => {
+                            this.alertMessage = '';
+                        }, 3000);
+                        return false;
+                    }
+                    if (!emailPattern.test(this.formData.email)) {
+                        this.formError = 'Please enter a valid email address.';
+                        this.alertMessage = 'Please enter a valid email address.';
+                        setTimeout(() => {
+                            this.alertMessage = '';
+                        }, 3000);
+                        return false;
+                    }
+                    return true;
+                },
+                toggleCollapse(index) {
+                    this.educationMilestones[index].collapsed = !this.educationMilestones[index].collapsed;
+                },
+                animateTimelineItem(index) {
+                    // Example: animation logic for timeline item
+                    console.log(`Hovered over timeline item ${index}`);
+                }
+            }
+        }).mount('#app');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
